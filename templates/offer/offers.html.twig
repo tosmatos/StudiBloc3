@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Offres
+{% endblock %}
+
+{% block body %}
+
+	{% for offer in offers %}
+		{% set priceCents = offer.price %}
+		{% set priceInEuros = priceCents / 100 %}
+		{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+
+		<div class="card mx-3 mb-3" href="#">
+			<div class="row g-0 mx-3">
+				<div class="col-md-4">
+					<img src="..." class="img-fluid rounded-start" alt="Image de la course">
+				</div>
+				<div class="col-md-6">
+					<div class="card-body">
+						<h5 class="card-title">{{ offer.title }}</h5>
+						<p class="card-text">
+							{{ offer.description }}
+						</p>
+						<p class="card-text">
+							<small class="text-body-secondary">Le
+								{{ offer.startdate|date("d/m/Y") }}
+							</small>
+						</p>
+						<p class="card-text">
+							<small class="text-body-secondary">De
+								{{ offer.startdate|date("H:i") }}
+								à
+								{{ offer.enddate|date("H:i") }}
+							</small>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-2 d-flex align-items-center">
+					<div class="row g-0">
+						<button type="button" class="btn btn-outline-dark" href="#">Réserver</button>
+						<p class="d-flex justify-content-center">À partir de
+							{{ formattedPrice }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
