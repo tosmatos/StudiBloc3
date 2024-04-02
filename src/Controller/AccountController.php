@@ -56,12 +56,12 @@ class AccountController extends AbstractController
 
             $clearPass = $form->get("password")->getData();
 
-            if ($passwordHasher->isPasswordValid($user, $clearPass)) {
-                //Initialize user session
-            }
-
             if ($user == null) {
                 return $this->redirectToRoute('accueil');
+            }
+
+            if ($passwordHasher->isPasswordValid($user, $clearPass)) {
+                //Initialize user session
             }
         }
 

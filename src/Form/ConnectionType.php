@@ -15,7 +15,7 @@ class ConnectionType extends AbstractType
         $builder
             ->add('e-mail', TextType::class)
             ->add('password', PasswordType::class)
-            ->add('connection', SubmitType::class)
+            ->add('connexion', SubmitType::class)
         ;
     }
 }
