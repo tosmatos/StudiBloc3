@@ -58,8 +58,34 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/modifier_offre/{id}', name: 'edit_offer')]
+    public function edit(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $repo = $entityManager->getRepository(Offer::class);
+
+        $offer = $repo->find($id);
+
+        $form = $this->createForm(OfferType::class, $offer);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$offer` variable has also been updated
+            $offer = $form->getData();
+
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('manage_offers');
+        }
+
+        return $this->render('admin/new_offer.html.twig', [
+            'form' => $form,
+            'offer' => $offer,
+        ]);
+    }
+
     #[Route('/admin/delete/{id}', name: 'delete_offer')]
-    public function delete(Request $request, EntityManagerInterface $entityManager, int $id)
+    public function delete(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
         $repo = $entityManager->getRepository(Offer::class);
 
