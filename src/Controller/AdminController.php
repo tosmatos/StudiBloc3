@@ -37,11 +37,38 @@ class AdminController extends AbstractController
 
             $entityManager->flush();
             
-            return $this->redirectToRoute('app_offer');
+            return $this->redirectToRoute('offers');
         }
 
         return $this->render('admin/new_offer.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/admin/gerer_offres', name: 'manage_offers')]
+    public function manage(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $repo = $entityManager->getRepository(Offer::class);
+
+        $offers = $repo->findAll();
+
+        return $this->render('admin/manage_offers.html.twig', [
+            'offers' => $offers,
+         //'form' => $form,
+        ]);
+    }
+
+    #[Route('/admin/delete/{id}', name: 'delete_offer')]
+    public function delete(Request $request, EntityManagerInterface $entityManager, int $id)
+    {
+        $repo = $entityManager->getRepository(Offer::class);
+
+        $offer = $repo->find($id);
+
+        $entityManager->remove($offer);
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('manage_offers');
     }
 }
