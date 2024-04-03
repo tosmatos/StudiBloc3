@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Offer;
 use App\Form\OfferType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AdminController extends AbstractController
 {
@@ -21,7 +23,7 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/nouvelle_offre', name: 'admin_new_offer')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $offer = new Offer();
 
@@ -33,11 +35,22 @@ class AdminController extends AbstractController
             // but, the original `$offer` variable has also been updated
             $offer = $form->getData();
 
-
             $image = $form->get("image")->getData();
-            // imageData is actual binary
-            $imageData = file_get_contents($image->getRealPath());
-            $offer->setImage($imageData);
+
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $saveFilename = $slugger->slug($originalFilename);
+            $newFilename = $saveFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+            try {
+                $image->move(
+                    $this->getParameter('offer_images'),
+                    $newFilename,
+                );
+            } catch (FileException $e) {
+                //Handle exception 
+            }
+
+            $offer->setImage($newFilename);
 
             $entityManager->persist($offer);
 

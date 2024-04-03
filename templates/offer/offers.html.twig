@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block body %}
-
+	{% if offers is empty %}
+		<p>Aucune offre pour le moment...</p>
+	{% endif %}
 	{% for offer in offers %}
 		{% set priceCents = offer.price %}
 		{% set priceInEuros = priceCents / 100 %}

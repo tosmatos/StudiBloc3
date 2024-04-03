@@ -3,6 +3,9 @@
 {% block title %}Gérer les offres{% endblock %}
 
 {% block body %}
+	{% if offers is empty %}
+		<p>Aucune offre en bdd!</p>
+	{% endif %}
     {% for offer in offers %}
 		{% set priceCents = offer.price %}
 		{% set priceInEuros = priceCents / 100 %}
@@ -11,7 +14,7 @@
 		<div class="card mx-3 mb-3" href="#">
 			<div class="row g-0 mx-3">
 				<div class="col-md-4">
-					<img src="..." class="img-fluid rounded-start" alt="Image de la course">
+					<img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid rounded-start" alt="Image de la course">
 				</div>
 				<div class="col-md-6">
 					<div class="card-body">
