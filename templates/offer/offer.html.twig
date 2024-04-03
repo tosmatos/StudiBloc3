@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Offres
+	{{offer.title}} - JO
 {% endblock %}
 
 {% block body %}
@@ -9,38 +9,51 @@
 	{% set priceInEuros = priceCents / 100 %}
 	{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
 
-    <h1>{{offer.title}}</h1>
-    
-    <div class="card mx-3 mb-3" href="#">
-        <div class="row g-0 mx-3">
-            <div class="col-md-4">
-                <img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid rounded-start" alt="Image de la course">
-            </div>
-            <div class="col-md-6">
-                <div class="card-body">
-                    <h5 class="card-title">{{ offer.title }}</h5>
-                    <p class="card-text text-truncate">
-                        {{ offer.description }}
-                    </p>
-                    <p class="card-text">
-                        <small class="text-body-secondary">Le
-                            {{ offer.startdate|date("d/m/Y") }}
-                        </small>
-                    </p>
-                    <p class="card-text">
-                        <small class="text-body-secondary">De
-                            {{ offer.startdate|date("H:i") }}
-                            à
-                            {{ offer.enddate|date("H:i") }}
-                        </small>
-                    </p>
+    <div class="container">
+        <div class="row d-flex align-items-start justify-content-start">
+            <a href="{{ path('offers') }}"><strong><i class="bi-arrow-left-circle"></i> Retour aux évènements</strong></a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card mx-3 mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h1 class="card-title">{{ offer.title }}</h1>
+                                <p class="card-text text-truncate">
+                                    {{ offer.description }}
+                                </p>
+                                <p class="card-text">
+                                    <strong class="text-body-secondary">
+                                    <i class="bi-calendar-event"></i> {{ offer.startdate|date("l d/m/Y") }}
+                                    de {{ offer.startdate|date("H:i") }} à {{ offer.enddate|date("H:i") }}
+                                    </strong>
+                                </p>
+                                <p class="card-text">
+                                    <strong class="text-body-secondary">
+                                    <i class="bi-pin-map"></i> {{ offer.location }}</strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid rounded-end h-100" alt="Image de la course">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-2 d-flex align-items-center">
-                <div class="row g-0">
-                    <button type="button" class="btn btn-outline-dark" href="#">Réserver</button>
-                    <p class="d-flex justify-content-center">À partir de
-                        {{ formattedPrice }}</p>
+            <div class="col-md-2">
+                <div class="card h-100 justify-content-center">
+                    <select class="form-select" aria-label="Selection type de place">
+                        <option selected>Type de place...</option>
+                        <option value="1">Solo (Une personne)</option>
+                        <option value="2">Duo (Deux personnes)</option>
+                        <option value="3">Familiale (4 personnes)</option>
+                    </select>
+                    <p class="d-flex justify-content-center">{{ formattedPrice }}</p>
+                    <a class="btn btn-outline-success" href="{{ path('offer', {'id': offer.id}) }}">Ajouter au panier</a>
                 </div>
             </div>
         </div>
