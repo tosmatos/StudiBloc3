@@ -13,10 +13,10 @@
 		{% set priceInEuros = priceCents / 100 %}
 		{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
 
-		<div class="card mx-3 mb-3" href="#">
-			<div class="row g-0 mx-3">
-				<div class="col-md-4">
-					<img src="..." class="img-fluid rounded-start" alt="Image de la course">
+		<div class="card mx-3 mb-3">
+			<div class="row g-0" >
+				<div class="col-md-4 d-flex flex-row" style="max-height: 200px;">
+					<img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid h-100 rounded-start" alt="Image de la course">
 				</div>
 				<div class="col-md-6">
 					<div class="card-body">
@@ -38,8 +38,8 @@
 						</p>
 					</div>
 				</div>
-				<div class="col-md-2 d-flex align-items-center">
-					<div class="row g-0">
+				<div class="col-md-2 flex align-items-center">
+					<div class="row g-0 m-3">
 						<button type="button" class="btn btn-outline-dark" href="#">Réserver</button>
 						<p class="d-flex justify-content-center">À partir de
 							{{ formattedPrice }}</p>
