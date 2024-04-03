@@ -31,15 +31,12 @@
 								{{ offer.enddate|date("H:i") }}
 							</small>
 						</p>
+						<p class="d-flex justify-content-center">À partir de {{ formattedPrice }}</p>
 					</div>
 				</div>
-				<div class="col-md-2 d-flex align-items-center">
-					<div class="row g-0">
-						<button type="button" class="btn btn-outline-dark" href="#">Réserver</button>
-						<p class="d-flex justify-content-center">À partir de {{ formattedPrice }}</p>
-                        <a href="{{ path('edit_offer', {'id': offer.id}) }}" class="btn btn-primary">Modifier</a>
-                        <a href="{{ path('delete_offer', {'id': offer.id}) }}" class="btn btn-outline-danger">Supprimer</a>
-					</div>
+				<div class="col-md-2 d-flex flex-column align-items-center justify-content-around">
+					<a href="{{ path('edit_offer', {'id': offer.id}) }}" class="btn btn-primary">Modifier</a>
+					<a href="{{ path('delete_offer', {'id': offer.id}) }}" class="btn btn-danger">Supprimer</a>
 				</div>
 			</div>
 		</div>

@@ -1,5 +1,9 @@
 html {
-    background-color: blue;
+    background: url('../images/background.jpg') no-repeat;
+    background-size: 100% auto;
+}
+
+body {
     margin-left: 15%;
     margin-right: 15%;
 }

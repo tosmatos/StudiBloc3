@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Offer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class OfferType extends AbstractType
 {
@@ -19,7 +21,11 @@ class OfferType extends AbstractType
             ->add('end_date')
             ->add('location')
             ->add('description')
-            ->add('image')
+            ->add('image', FileType::class, [
+                'constraints' => [
+                    new Image()
+                ]
+            ])
             ->add('price')
             ->add('save', SubmitType::class)
         ;

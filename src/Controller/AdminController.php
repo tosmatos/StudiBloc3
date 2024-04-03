@@ -37,7 +37,7 @@ class AdminController extends AbstractController
 
             $entityManager->flush();
             
-            return $this->redirectToRoute('offers');
+            return $this->redirectToRoute('manage_offers');
         }
 
         return $this->render('admin/new_offer.html.twig', [
