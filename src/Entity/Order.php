@@ -32,15 +32,12 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToMany(targetEntity: Offer::class, inversedBy: 'orders')]
-    private Collection $offers;
-
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?User $user_order = null;
+    #[ORM\OneToMany(targetEntity: OrderOffer::class, mappedBy: 'Orderr')]
+    private Collection $orderOffers;
 
     public function __construct()
     {
-        $this->offers = new ArrayCollection();
+        $this->orderOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,37 +106,31 @@ class Order
     }
 
     /**
-     * @return Collection<int, Offer>
+     * @return Collection<int, OrderOffer>
      */
-    public function getOffers(): Collection
+    public function getOrderOffers(): Collection
     {
-        return $this->offers;
+        return $this->orderOffers;
     }
 
-    public function addOffer(Offer $offer): static
+    public function addOrderOffer(OrderOffer $orderOffer): static
     {
-        if (!$this->offers->contains($offer)) {
-            $this->offers->add($offer);
+        if (!$this->orderOffers->contains($orderOffer)) {
+            $this->orderOffers->add($orderOffer);
+            $orderOffer->setOrderr($this);
         }
 
         return $this;
     }
 
-    public function removeOffer(Offer $offer): static
+    public function removeOrderOffer(OrderOffer $orderOffer): static
     {
-        $this->offers->removeElement($offer);
-
-        return $this;
-    }
-
-    public function getUserOrder(): ?User
-    {
-        return $this->user_order;
-    }
-
-    public function setUserOrder(?User $user_order): static
-    {
-        $this->user_order = $user_order;
+        if ($this->orderOffers->removeElement($orderOffer)) {
+            // set the owning side to null (unless already changed)
+            if ($orderOffer->getOrderr() === $this) {
+                $orderOffer->setOrderr(null);
+            }
+        }
 
         return $this;
     }

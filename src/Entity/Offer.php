@@ -40,12 +40,12 @@ class Offer
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\ManyToMany(targetEntity: Order::class, mappedBy: 'offers')]
-    private Collection $orders;
+    #[ORM\OneToMany(targetEntity: OrderOffer::class, mappedBy: 'Offer')]
+    private Collection $orderOffers;
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
+        $this->orderOffers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,27 +150,30 @@ class Offer
     }
 
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, OrderOffer>
      */
-    public function getOrders(): Collection
+    public function getOrderOffers(): Collection
     {
-        return $this->orders;
+        return $this->orderOffers;
     }
 
-    public function addOrder(Order $order): static
+    public function addOrderOffer(OrderOffer $orderOffer): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->addOffer($this);
+        if (!$this->orderOffers->contains($orderOffer)) {
+            $this->orderOffers->add($orderOffer);
+            $orderOffer->setOffer($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeOrderOffer(OrderOffer $orderOffer): static
     {
-        if ($this->orders->removeElement($order)) {
-            $order->removeOffer($this);
+        if ($this->orderOffers->removeElement($orderOffer)) {
+            // set the owning side to null (unless already changed)
+            if ($orderOffer->getOffer() === $this) {
+                $orderOffer->setOffer(null);
+            }
         }
 
         return $this;
