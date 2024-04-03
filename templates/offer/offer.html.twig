@@ -5,15 +5,21 @@
 {% endblock %}
 
 {% block body %}
+    {% set priceCents = offer.price %}
+	{% set priceInEuros = priceCents / 100 %}
+	{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+
+    <h1>{{offer.title}}</h1>
+    
     <div class="card mx-3 mb-3" href="#">
         <div class="row g-0 mx-3">
             <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="Image de la course">
+                <img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid rounded-start" alt="Image de la course">
             </div>
             <div class="col-md-6">
                 <div class="card-body">
                     <h5 class="card-title">{{ offer.title }}</h5>
-                    <p class="card-text">
+                    <p class="card-text text-truncate">
                         {{ offer.description }}
                     </p>
                     <p class="card-text">

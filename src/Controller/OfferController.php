@@ -14,14 +14,26 @@ use Symfony\Component\Routing\Attribute\Route;
 class OfferController extends AbstractController
 {
     #[Route('offres', name: 'offers')]
-    public function offers(EntityManagerInterface $entityManagerInterface)
+    public function offers(EntityManagerInterface $entityManager)
     {
-        $repo = $entityManagerInterface->getRepository(Offer::class);
+        $repo = $entityManager->getRepository(Offer::class);
 
         $offers = $repo->findAll();
 
         return $this->render('offer/offers.html.twig', [
             'offers' => $offers,
+        ]);
+    }
+
+    #[Route('offre/{id}', name: 'offer')]
+    public function offer(EntityManagerInterface $entityManager, int $id)
+    {
+        $repo = $entityManager->getRepository(Offer::class);
+
+        $offer = $repo->find($id);
+
+        return $this->render('offer/offer.html.twig', [
+            'offer' => $offer,
         ]);
     }
 }
