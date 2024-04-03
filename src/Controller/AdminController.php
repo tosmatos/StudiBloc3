@@ -33,6 +33,12 @@ class AdminController extends AbstractController
             // but, the original `$offer` variable has also been updated
             $offer = $form->getData();
 
+
+            $image = $form->get("image")->getData();
+            // imageData is actual binary
+            $imageData = file_get_contents($image->getRealPath());
+            $offer->setImage($imageData);
+
             $entityManager->persist($offer);
 
             $entityManager->flush();

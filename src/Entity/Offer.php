@@ -34,8 +34,8 @@ class Offer
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::BINARY)]
-    private $image = null;
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     #[ORM\Column]
     private ?int $price = null;
@@ -125,12 +125,12 @@ class Offer
         return $this;
     }
 
-    public function getImage()
+    public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage($image): static
+    public function setImage(string $image): static
     {
         $this->image = $image;
 

@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => false])]
     private ?bool $is_admin = null;
 
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user_order')]
