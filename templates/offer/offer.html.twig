@@ -46,14 +46,18 @@
             </div>
             <div class="col-md-2">
                 <div class="card h-100 justify-content-center">
-                    <select class="form-select" aria-label="Selection type de place">
-                        <option selected>Type de place...</option>
-                        <option value="1">Solo (Une personne)</option>
-                        <option value="2">Duo (Deux personnes)</option>
-                        <option value="3">Familiale (4 personnes)</option>
-                    </select>
-                    <p class="d-flex justify-content-center">{{ formattedPrice }}</p>
-                    <a class="btn btn-outline-success" href="{{ path('offer', {'id': offer.id}) }}">Ajouter au panier</a>
+                    <form method="POST" action="{{ path('cart_add') }}">
+                        <select class="form-select" aria-label="Selection type de place" name="itemType">
+                            <option selected>Type de place...</option>
+                            <option value="solo">Solo (Une personne)</option>
+                            <option value="duo">Duo (Deux personnes)</option>
+                            <option value="famille">Familiale (4 personnes)</option>
+                        </select>
+                        <input type="hidden" name="offerId" value="{{ offer.id }}">
+                        <p class="d-flex justify-content-center">{{ formattedPrice }}</p>
+                        <button type="submit" class="btn btn-outline-success w-100">Ajouter au panier</button>
+                    </form>
+                    {# <a class="btn btn-outline-success" href="{{ path('offer', {'id': offer.id}) }}">Ajouter au panier</a> #}
                 </div>
             </div>
         </div>

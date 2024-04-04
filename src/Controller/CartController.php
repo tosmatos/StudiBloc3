@@ -23,10 +23,13 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/{id}', name: 'cart_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/cart/add', name: 'cart_add')]
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $offer = $entityManager->getRepository(Offer::class)->find($id);
+        $offerId = $request->request->get('offerId');
+        $itemType = $request->request->get('itemType');
+
+        $offer = $entityManager->getRepository(Offer::class)->find($offerId);
 
         $session = $request->getSession();
 
