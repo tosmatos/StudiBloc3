@@ -29,13 +29,13 @@
 					<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 						<div class="navbar-nav">
 							<a class="nav-link d-flex align-items-center" aria-current="page" href="{{ path('offers') }}">
-								<i class="bi-ticket-detailed"></i>&nbsp;Évènements
+								Évènements &nbsp;<i class="bi-ticket-detailed"></i>
 								</a>
 							<a class="navbar-brand" href="{{ path('accueil') }}">
 								<img src="{{ asset('images/jologo.svg') }}" alt="Logo" class="bi" width="180" height="180"/>
 							</a>
-							<a class="nav-link d-flex align-items-center" href="{{ path('account') }}">
-								<i class="bi-person"></i>&nbsp;Mon Compte
+							<a class="nav-link d-flex align-items-center" href="{{ app.user ? path('account') : path('account_connection') }}">
+								<i class="bi-person"></i>&nbsp; {{ app.user ? 'Mon Compte' : 'Se connecter' }}
 							</a>
 						</div>
 					</div>

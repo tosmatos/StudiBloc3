@@ -61,11 +61,17 @@ class AccountController extends AbstractController
             }
 
             if ($passwordHasher->isPasswordValid($user, $clearPass)) {
-                //Initialize user session
+                $session = $request->getSession();
+                $session->set('user', $user);
             }
+            else {
+                return $this->redirectToRoute('account_connection');
+            }
+
+            return $this->redirectToRoute('account');
         }
 
-        return $this->render('account/new_account.html.twig', [
+        return $this->render('account/connexion.html.twig', [
             'form' => $form,
         ]);
     }

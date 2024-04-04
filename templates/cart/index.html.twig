@@ -2,6 +2,8 @@
 
 {% block title %}Panier{% endblock %}
 
+{% set totalPrice = 0 %}
+
 {% block body %}
     <h1>Panier</h1>
     {% if cart is empty %}
@@ -10,44 +12,53 @@
             <a class="btn btn-primary" href="{{ path('offers') }}">Voir nos offres</a>
         </div>
     {% else %}
-        <div class="container">
-            <div class="col-md-9" name="LeftSide">
-                {% for offer in cart %}
-                    <div class="card mx-3 mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-6">
-                                <div class="card-body">
-                                    <h1 class="card-title">{{ offer[0].title }}</h1>
-                                    <p class="card-text text-truncate">
-                                        {{ offer[0].description }}
-                                    </p>
-                                    <p class="card-text">
-                                        <strong class="text-body-secondary">
-                                        <i class="bi-calendar-event"></i> {{ offer[0].startdate|date("l d/m/Y") }}
-                                        de {{ offer[0].startdate|date("H:i") }} à {{ offer[0].enddate|date("H:i") }}
-                                        </strong>
-                                    </p>
-                                    <p class="card-text">
-                                        <strong class="text-body-secondary">
-                                        <i class="bi-pin-map"></i> {{ offer[0].location }}</strong>
-                                    </p>
+        <div class="container flex">
+            <div class="row">
+                <div class="col-md-9" name="LeftSide">
+                    {% for offer in cart %}
+                        <div class="card px-3 mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-6">
+                                    <div class="card-body">
+                                        <h1 class="card-title">{{ offer[0].title }}</h1>
+                                        <p class="card-text text-truncate">
+                                            {{ offer[0].description }}
+                                        </p>
+                                        <p class="card-text">
+                                            <strong class="text-body-secondary">
+                                            <i class="bi-calendar-event"></i> {{ offer[0].startdate|date("l d/m/Y") }}
+                                            de {{ offer[0].startdate|date("H:i") }} à {{ offer[0].enddate|date("H:i") }}
+                                            </strong>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong class="text-body-secondary">
+                                            <i class="bi-pin-map"></i> {{ offer[0].location }}</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <p>Type de place : {{ offer[1] }}</p>
+                                    <form method="POST" action="{{ path('cart_remove') }}">
+                                        <input type="hidden" name="offerIndex" value="{{ loop.index0 }}">
+                                        <button type="submit" class="btn btn-danger w-100">Retirer du panier</button>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="col-md-6 text-end">
-                                <p>Type de place : {{ offer[1] }}</p>
-                                <form method="POST" action="{{ path('cart_remove') }}">
-                                    <input type="hidden" name="offerIndex" value="{{ loop.index0 }}">
-                                    <button type="submit" class="btn btn-danger w-100">Retirer du panier</button>
-                                </form>
-                            </div>
                         </div>
+                        {% set totalPrice = totalPrice + offer[0].price %}
+                    {% endfor %}
+                    {% set priceCents = totalPrice %}
+                    {% set priceInEuros = priceCents / 100 %}
+                    {% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+                </div>
+                <div class="col-md-3" name="RightSide">
+                    <div class="border rounded p-3">
+                        <h2>Votre commande</h2>
+                        <p>Nombres d'éléments : <strong>{{cart|length}}</strong></p>
+                        <hr>
+                        <p>Prix total : {{ formattedPrice }}</p>
+                        <button class="btn btn-outline-primary">Passer commande</button>
                     </div>
-                {% endfor %}
-            </div>
-            <div class="vr"></div>
-            <div class="col-md-3" name="RightSide">
-                <div class="border rounded">
-
                 </div>
             </div>
         </div>
