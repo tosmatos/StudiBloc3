@@ -19,7 +19,7 @@ class CartController extends AbstractController
         $cart = $session->has('cart') ? $session->get('cart') : [];
 
         return $this->render('cart/index.html.twig', [
-            'controller_name' => 'CartController',
+            'cart' => $cart,
         ]);
     }
 
@@ -29,13 +29,37 @@ class CartController extends AbstractController
         $offerId = $request->request->get('offerId');
         $itemType = $request->request->get('itemType');
 
+        $validTypes = ['solo', 'duo', 'famille'];
+
+        if(!in_array($itemType, $validTypes, true)){
+            return $this->redirectToRoute('offer', ['id' => $offerId]);
+        }
+
         $offer = $entityManager->getRepository(Offer::class)->find($offerId);
 
         $session = $request->getSession();
 
         $cart = $session->has('cart') ? $session->get('cart') : [];
 
-        $cart->add([$offer, 'hey']);
+        array_push($cart, [$offer, $itemType]);
+
+        $session->set('cart', $cart);
+
+        return $this->redirectToRoute('cart');
+    }
+
+    #[Route('/cart/remove', name: 'cart_remove')]
+    public function remove(Request $request): Response
+    {
+        $offerIndex = $request->request->get('offerIndex');
+
+        $session = $request->getSession();
+
+        $cart = $session->get('cart');
+
+        unset($cart[$offerIndex]);
+
+        $session->set('cart', $cart);
 
         return $this->redirectToRoute('cart');
     }
