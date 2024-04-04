@@ -57,7 +57,7 @@ class CartController extends AbstractController
 
         $cart = $session->get('cart');
 
-        unset($cart[$offerIndex]);
+        array_splice($cart, $offerIndex, 1);
 
         $session->set('cart', $cart);
 
