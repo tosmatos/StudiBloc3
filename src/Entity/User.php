@@ -42,9 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
-    #[ORM\Column(options: ['default' => false])]
-    private ?bool $is_admin = null;
-
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user_order')]
     private Collection $orders;
 
@@ -145,18 +142,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function isIsAdmin(): ?bool
-    {
-        return $this->is_admin;
-    }
-
-    public function setIsAdmin(bool $is_admin): static
-    {
-        $this->is_admin = $is_admin;
 
         return $this;
     }

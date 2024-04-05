@@ -23,6 +23,7 @@ class AccountController extends AbstractController
         $form = $this->createForm(AccountType::class, $user);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$offer` variable has also been updated
@@ -36,7 +37,7 @@ class AccountController extends AbstractController
 
             $entityManager->flush();
             
-            return $this->redirectToRoute('app_offer');
+            return $this->redirectToRoute('account_connection');
         }
 
         return $this->render('account/new_account.html.twig', [
