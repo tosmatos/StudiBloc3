@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AccountController extends AbstractController
 {
@@ -44,45 +45,27 @@ class AccountController extends AbstractController
     }
 
     #[Route('/compte/connection', name: 'account_connection')]
-    public function account_connection(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function account_connection(AuthenticationUtils $authenticationUtils): Response
     {
-        $userRepo = $entityManager->getRepository(User::class);
-        $form = $this->createForm(ConnectionType::class);
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
 
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            $user = $userRepo->findOneBy(['email' => $form->get("e-mail")->getData()]);
-
-            $clearPass = $form->get("password")->getData();
-
-            if ($user == null) {
-                return $this->redirectToRoute('accueil');
-            }
-
-            if ($passwordHasher->isPasswordValid($user, $clearPass)) {
-                $session = $request->getSession();
-                $session->set('user', $user);
-            }
-            else {
-                return $this->redirectToRoute('account_connection');
-            }
-
-            return $this->redirectToRoute('account');
-        }
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('account/connexion.html.twig', [
-            'form' => $form,
+            'last_username' => $lastUsername,
+            'error'         => $error,
         ]);
     }
 
     #[Route('/compte', name: 'account')]
     public function myaccount(EntityManagerInterface $entityManager): Response
     {
-        $account = $entityManager->getRepository(User::class)->find(0);
+        $user = $this->getUser();
 
         return $this->render('account/myaccount.html.twig', [
-            'account' => $account,
+            'account' => $user,
         ]);
     }
 }

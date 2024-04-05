@@ -57,7 +57,12 @@
                         <p>Nombres d'éléments : <strong>{{cart|length}}</strong></p>
                         <hr>
                         <p>Prix total : {{ formattedPrice }}</p>
-                        <button class="btn btn-outline-primary">Passer commande</button>
+                        {% if app.user %}
+                            <button class="btn btn-outline-primary">Passer commande</button>
+                        {% else %}
+                            <p>Pour passez commande vous devez créer un compte ou vous connecter.</p>
+                            <a class="btn btn-outline-primary" href="{{ path('account_connection') }}">Connexion</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
