@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\ConnectionType;
@@ -67,6 +68,20 @@ class AccountController extends AbstractController
 
         return $this->render('account/myaccount.html.twig', [
             'account' => $user,
+        ]);
+    }
+
+    #[Route('/compte/commandes', name: 'account_orders')]
+    public function orders(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $orderRepo = $entityManager->getRepository(Order::class);
+
+        $orders = $orderRepo->findBy(['user_id' => $user->getId()]);
+
+        return $this->render('account/orders.html.twig', [
+            'orders' => $orders,
         ]);
     }
 }

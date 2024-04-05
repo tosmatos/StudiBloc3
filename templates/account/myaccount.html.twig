@@ -6,6 +6,13 @@
 
 {% block body %}
 
+	<div class="container">
+		<h1>Bonjour {{ account.name }}</h1>
+
+		<a class="btn btn-primary" href="{{ path('account_orders') }}">Vos commandes</a>
+		<a class="btn btn-warning" href="{{ path('_logout_main') }}">Se déconnecter</a>
+	</div>
+
 {{ account.name }}
 
 {% endblock %}

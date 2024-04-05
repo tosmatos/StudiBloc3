@@ -63,4 +63,10 @@ class CartController extends AbstractController
 
         return $this->redirectToRoute('cart');
     }
+
+    #[Route('/cart/buy', name: 'cart_buy')]
+    public function buy(Request $request): Response
+    {
+        return $this->redirectToRoute('account_orders');
+    }
 }

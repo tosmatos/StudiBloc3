@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% if orders %}
+        {% else %}
+            <p>Vous n'avez passé aucune commande.</p>
+        {% endif %}
+    </div>
+{% endblock %}
