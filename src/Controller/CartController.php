@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Offer;
+use App\Entity\Order;
+use App\Entity\OrderOffer;
+use DateTime;
+use Doctrine\Common\Cache\MultiGetCache;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +35,7 @@ class CartController extends AbstractController
 
         $validTypes = ['solo', 'duo', 'famille'];
 
-        if(!in_array($itemType, $validTypes, true)){
+        if (!in_array($itemType, $validTypes, true)) {
             return $this->redirectToRoute('offer', ['id' => $offerId]);
         }
 
@@ -65,8 +69,54 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/buy', name: 'cart_buy')]
-    public function buy(Request $request): Response
+    public function buy(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $session = $request->getSession();
+
+        if (!$session->has('cart')) {
+            return $this->redirectToRoute('offers');
+        }
+
+        $cart = $session->get('cart');
+
+        $order = new Order();
+        $order->setUserId($this->getUser()->getId());
+        $order->setStatus('confirmée');
+
+        $totalprice = 0;
+
+        foreach ($cart as [$offer, $itemType]) {
+            $orderOffer = new OrderOffer();
+
+            $multiplier = 0;
+            switch ($itemType) {
+                case 'solo':
+                    $multiplier = 1;
+                    break;
+                case 'duo':
+                    $multiplier = 2;
+                    break;
+                case 'famille':
+                    $multiplier = 4;
+                    break;
+            }
+            $totalprice += $offer->getPrice() * $multiplier;
+
+            $orderOffer->setOffer($entityManager->getReference(Offer::class, $offer->getId()));
+            $orderOffer->setOrderr($order);
+            $orderOffer->setType($multiplier);
+            $order->addOrderOffer($orderOffer);
+            $entityManager->persist($orderOffer);
+        }
+
+        $order->setTotalPrice($totalprice);
+        $order->setDate(new DateTime(date("Y-m-d h:m:s")));
+
+        $order->setKey(substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(50 / strlen($x)))), 1, 50));
+
+        $entityManager->persist($order);
+        $entityManager->flush();
+
         return $this->redirectToRoute('account_orders');
     }
 }

@@ -16,6 +16,9 @@
             <div class="row">
                 <div class="col-md-9" name="LeftSide">
                     {% for offer in cart %}
+                    {% set priceCents = offer[0].price %}
+                    {% set priceInEuros = priceCents / 100 %}
+                    {% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
                         <div class="card px-3 mb-3">
                             <div class="row g-0">
                                 <div class="col-md-6">
@@ -37,6 +40,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 text-end">
+                                    <p>Prix de base : {{ formattedPrice }}</p>
                                     <p>Type de place : {{ offer[1] }}</p>
                                     <form method="POST" action="{{ path('cart_remove') }}">
                                         <input type="hidden" name="offerIndex" value="{{ loop.index0 }}">
@@ -58,7 +62,10 @@
                         <hr>
                         <p>Prix total : {{ formattedPrice }}</p>
                         {% if app.user %}
-                            <button class="btn btn-outline-primary">Passer commande</button>
+                            <form method="POST" action="{{ path('cart_buy') }}">
+                                <button type="submit" class="btn btn-outline-primary">Passer commande</button>
+                            </form>
+                            
                         {% else %}
                             <p>Pour passez commande vous devez créer un compte ou vous connecter.</p>
                             <a class="btn btn-outline-primary" href="{{ path('account_connection') }}">Connexion</a>
