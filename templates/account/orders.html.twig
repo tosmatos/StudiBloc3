@@ -3,6 +3,16 @@
 {% block body %}
     <div class="container">
         {% if orders %}
+            {% for order in orders %}
+                {% set priceCents = order.totalPrice %}
+                {% set priceInEuros = priceCents / 100 %}
+                {% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+                <div class="card mx-3 mb-3 h-100" style="max-height: 150px;">
+                    <p>{{order.status}}</p>
+                    <p>{{formattedPrice}}</p>
+                    <p>Offre passée le {{order.date|date("d/m/Y")}} à {{order.date|date("H:i")}}</p>
+                </div>
+            {% endfor %}
         {% else %}
             <p>Vous n'avez passé aucune commande.</p>
         {% endif %}
