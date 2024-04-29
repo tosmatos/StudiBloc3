@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Offer;
+use App\Entity\OrderOffer;
 use App\Form\OfferType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -68,11 +69,19 @@ class AdminController extends AbstractController
     public function manage(Request $request, EntityManagerInterface $entityManager): Response
     {
         $repo = $entityManager->getRepository(Offer::class);
+        $offerOrderRepo = $entityManager->getRepository(OrderOffer::class);
 
         $offers = $repo->findAll();
+        $offersSales = [];
+
+        foreach ($offers as $offer) {
+            $foundOffers = $offerOrderRepo->findBy(['Offer' => $offer->getId()]);
+            array_push($offersSales, count($foundOffers));
+        }
 
         return $this->render('admin/manage_offers.html.twig', [
             'offers' => $offers,
+            'sales' => $offersSales,
          //'form' => $form,
         ]);
     }

@@ -8,12 +8,27 @@
                 {% set priceInEuros = priceCents / 100 %}
                 {% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
                 {% set qrUrl = app.user.key ~ order.key %}
-                <div class="card mx-3 mb-3 h-100" style="max-height: 150px;">
-                    <p>{{order.status}}</p>
-                    <p>{{formattedPrice}}</p>
-                    <p>Offre passée le {{order.date|date("d/m/Y")}} à {{order.date|date("H:i")}}</p>
-                    <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" width="300">
+            <div class="card mx-3 mb-3 h-100">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <p>{{order.status}}</p>
+                        <p>{{formattedPrice}}</p>
+                        <p>Offre passée le {{order.date|date("d/m/Y")}} à {{order.date|date("H:i")}}</p>
+                    </div>
+                    <div class="col-md-4 flex align-item-center">
+                        <p>Vous avez {{ order.orderOffers|length }} événements dans cette commande :</p>
+                        {% for offer in order.orderOffers %}
+                            <p>{{offer.offer.title}}</p>
+                            <p>Le {{offer.offer.startDate|date("d/m/Y")}} à {{offer.offer.startDate|date("H:i")}}</p>
+                            <p>Type de place : {{offer.type}}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-2 flex align-items-center">
+                        <p>Votre QR Code pour ce ticket :</p>
+                        <img class="img-fluid" src="{{ qr_code_url(qrUrl) }}" alt="QR Code">
+                    </div>
                 </div>
+            </div>
             {% endfor %}
         {% else %}
             <p>Vous n'avez passé aucune commande.</p>
