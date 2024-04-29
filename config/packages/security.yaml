@@ -24,6 +24,7 @@ security:
             form_login:
                 login_path: account_connection
                 check_path: account_connection
+                enable_csrf: true
             logout:
                 path: /logout
                 target: accueil
