@@ -7,10 +7,12 @@
                 {% set priceCents = order.totalPrice %}
                 {% set priceInEuros = priceCents / 100 %}
                 {% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+                {% set qrUrl = app.user.key ~ order.key %}
                 <div class="card mx-3 mb-3 h-100" style="max-height: 150px;">
                     <p>{{order.status}}</p>
                     <p>{{formattedPrice}}</p>
                     <p>Offre passée le {{order.date|date("d/m/Y")}} à {{order.date|date("H:i")}}</p>
+                    <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" width="300">
                 </div>
             {% endfor %}
         {% else %}

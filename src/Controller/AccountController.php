@@ -33,6 +33,7 @@ class AccountController extends AbstractController
             $hashedPass = $passwordHasher->hashPassword($user, $user->getPassword());
 
             $user->setPassword($hashedPass);
+            $user->setKey(substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(50 / strlen($x)))), 1, 50));
 
             $entityManager->persist($user);
 
