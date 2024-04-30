@@ -13,9 +13,9 @@
 		{% set priceInEuros = priceCents / 100 %}
 		{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
 
-		<div class="card mx-3 mb-3 h-100" style="max-height: 150px;">
-			<div class="row g-0" style="max-height: 200px;">
-				<div class="col-md-4 d-flex flex-row" style="max-height: 150px;">
+		<div class="card mx-3 mb-3 h-100">
+			<div class="row g-0">
+				<div class="col-md-4 d-flex flex-row">
 					<img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid h-100 rounded-start" alt="Image de la course">
 				</div>
 				<div class="col-md-6">
