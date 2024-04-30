@@ -12,6 +12,8 @@ use App\Entity\OrderOffer;
 use App\Form\OfferType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\Image;
+
 
 class AdminController extends AbstractController
 {
@@ -87,7 +89,7 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/modifier_offre/{id}', name: 'edit_offer')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, int $id): Response
     {
         $repo = $entityManager->getRepository(Offer::class);
 
@@ -100,6 +102,23 @@ class AdminController extends AbstractController
             // $form->getData() holds the submitted values
             // but, the original `$offer` variable has also been updated
             $offer = $form->getData();
+
+            $image = $form->get("image")->getData();
+
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $saveFilename = $slugger->slug($originalFilename);
+            $newFilename = $saveFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+            try {
+                $image->move(
+                    $this->getParameter('offer_images'),
+                    $newFilename,
+                );
+            } catch (FileException $e) {
+                //Handle exception 
+            }
+
+            $offer->setImage($newFilename);
 
             $entityManager->flush();
             

@@ -22,9 +22,8 @@ class OfferType extends AbstractType
             ->add('location')
             ->add('description')
             ->add('image', FileType::class, [
-                'constraints' => [
-                    new Image()
-                ]
+                'constraints' => [new Image()],
+                'mapped' => false,
             ])
             ->add('price')
             ->add('save', SubmitType::class)
