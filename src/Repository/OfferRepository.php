@@ -21,6 +21,16 @@ class OfferRepository extends ServiceEntityRepository
         parent::__construct($registry, Offer::class);
     }
 
+    public function findLastThree()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->orderBy('t.id', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Offer[] Returns an array of Offer objects
 //     */

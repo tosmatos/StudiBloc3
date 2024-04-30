@@ -3,12 +3,57 @@
 {% block title %}Hello AccueilController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
 
-<div class="example-wrapper">
-    <h1>Bienvenue sur le site OFFICIEL de la revente de tickets pour les épreuves des JO PARFAITEMENTS LÉGAUX!</h1>
-</div>
+    <div class="example-wrapper">
+        <h1>Bienvenue sur le site OFFICIEL* de la revente de tickets pour les épreuves des JO!</h1>
+    </div>
+    <h2>Nos dernières offres :</h2>
+    {% for offer in lastOffers %}
+        {% set priceCents = offer.price %}
+		{% set priceInEuros = priceCents / 100 %}
+		{% set formattedPrice = priceInEuros | number_format(2, ',', ' ') ~ '€' %}
+
+		<div class="card mx-3 mb-3 h-100" style="max-height: 150px;">
+			<div class="row g-0" style="max-height: 200px;">
+				<div class="col-md-4 d-flex flex-row" style="max-height: 150px;">
+					<img src="{{ asset('uploads/offer_images/' ~ offer.image) }}" class="img-fluid h-100 rounded-start" alt="Image de la course">
+				</div>
+				<div class="col-md-6">
+					<div class="card-body">
+						<h5 class="card-title">{{ offer.title }}</h5>
+						<p class="card-text">
+							{{ offer.description }}
+						</p>
+						<p class="card-text">
+							<small class="text-body-secondary">Le
+								{{ offer.startdate|date("d/m/Y") }}
+							</small>
+						</p>
+						<p class="card-text">
+							<small class="text-body-secondary">De
+								{{ offer.startdate|date("H:i") }}
+								à
+								{{ offer.enddate|date("H:i") }}
+							</small>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-2 flex align-items-center">
+					<div class="row g-0 m-3">
+						<a class="btn btn-outline-dark" href="{{ path('offer', {'id': offer.id}) }}">Détails</a>
+						<p class="d-flex justify-content-center">À partir de
+							{{ formattedPrice }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+    {% endfor %}
+    <div>
+
+    </div>
+    <p>*Ceci n'est pas le site officiel</p>
 {% endblock %}
