@@ -47,8 +47,8 @@
             <div class="col-md-2">
                 <div class="card h-100 justify-content-center">
                     <form method="POST" action="{{ path('cart_add') }}">
-                        <select class="form-select" aria-label="Selection type de place" name="itemType">
-                            <option selected>Type de place...</option>
+                        <select class="form-select" aria-label="Selection type de place" name="itemType" required>
+                            <option value="" selected>Type de place...</option>
                             <option value="solo">Solo (Une personne)</option>
                             <option value="duo">Duo (Deux personnes)</option>
                             <option value="famille">Familiale (4 personnes)</option>
